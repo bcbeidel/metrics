@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: fct_users
+    description: 
+
+    columns:
+      - name: user_name
+        description: "Email for the user or service account (string)"
+        tests:
+          - not_null
+          - unique
+
+      - name: user_team
+        description: "Team name for the user or service account (string)"
+        tests:
+          - not_null
+
+      - name: is_user_account
+        description: "Indicates if the email is a user account, rather than a service account. Potential values: 0, 1, or null."
+        tests:
+          - not_null

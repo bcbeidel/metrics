@@ -25,5 +25,7 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 vars:
+  # location of table that maps user emails to boolean 'is_user_account'
+  metrics__user_mapping_table:
   # number of days of job history to include in metrics calculation
   metrics__days_of_history: 90
