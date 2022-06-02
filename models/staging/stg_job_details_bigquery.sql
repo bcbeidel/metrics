@@ -23,7 +23,7 @@ select
 , error_result.reason	                                                    as error_code
 , error_result.message                                                    as error_message
 from `region-us`.`INFORMATION_SCHEMA`.`JOBS_BY_PROJECT`
-where creation_time >= (DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL -{{ var('wh_metrics__days_of_history') }} DAY))
+where creation_time >= (DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL -{{ var('metrics__days_of_history') }} DAY))
 
 {% if is_incremental() %}
   and creation_time >= (select TIMESTAMP_ADD(max(created_at), INTERVAL -1 HOUR) from {{ this }} )
