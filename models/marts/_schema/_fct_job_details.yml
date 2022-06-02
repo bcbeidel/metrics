@@ -8,7 +8,7 @@ models:
       - name: job_id
       - name: created_at
       - name: started_at
-      - name: ended_at	
+      - name: ended_at
       - name: statement_type
       - name: query_text_md5
       - name: query_text
