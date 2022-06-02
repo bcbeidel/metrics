@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: fct_job_details
+    description: Details of individual user jobs
+
+    columns:
+      - name: job_id
+      - name: created_at
+      - name: started_at
+      - name: ended_at	
+      - name: statement_type
+      - name: query_text_md5
+      - name: query_text
+      - name: user_id
+      - name: user_name
+      - name: query_status
+      - name: query_cost
+      - name: error_code
+      - name: error_message
