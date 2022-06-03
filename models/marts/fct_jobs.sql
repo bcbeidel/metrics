@@ -13,10 +13,10 @@
 
 with job_details as (
   {% if target.type == 'redshift' %} 
-    select * from {{ ref('stg_job_details_redshift') }} 
+    select * from {{ ref('stg_jobs_redshift') }} 
   {% endif %}
   {% if target.type == 'bigquery' %} 
-    select * from {{ ref('stg_job_details_bigquery') }} 
+    select * from {{ ref('stg_jobs_bigquery') }} 
   {% endif %}
 )
 

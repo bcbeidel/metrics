@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: fct_job_details
-    description: Details of individual user jobs
+    description: Details of individual jobs
 
     columns:
       - name: job_id
