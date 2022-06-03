@@ -81,13 +81,12 @@ user_query_duration_percentiles as (
 
 user_query_duration_percentiles as (
 
-  select 
+  select distinct
     created_at_date                                                                                              as created_at_date
   , percentile_cont(0.95) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p95_query_duration_seconds
   , percentile_cont(0.99) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p99_query_duration_seconds
   from all_jobs
     where is_user_account = 1 and is_select_statement = 1
-    group by 1
 
 )
 
@@ -98,9 +97,9 @@ select
 , daily_costs.job_count_users                                 as job_count_users
 , daily_costs.job_count_nonusers                              as job_count_nonusers
 , daily_costs.job_count_all                                   as job_count_all
-, daily_costs.query_cost_usd_by_users                         as query_cost_usd_by_users
-, daily_costs.query_cost_usd_by_nonusers                      as query_cost_usd_by_nonusers
-, daily_costs.query_cost_usd_all                              as query_cost_usd_all
+, daily_costs.estimated_cost_usd_by_users                     as estimated_cost_usd_by_users
+, daily_costs.estimated_cost_usd_by_nonusers                  as estimated_cost_usd_by_nonusers
+, daily_costs.estimated_cost_usd_all                          as estimated_cost_usd_all
 , user_query_duration_percentiles.p95_query_duration_seconds  as p95_query_duration_seconds
 , user_query_duration_percentiles.p99_query_duration_seconds  as p99_query_duration_seconds
 , {{ var('metrics__p95_query_duration_seconds_SLO') }}        as p95_query_duration_seconds_SLO
