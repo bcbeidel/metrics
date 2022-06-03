@@ -18,7 +18,7 @@ select
       total_bytes_billed
     , POWER(10, 12)) 
   ), 2
-)                                                                         as query_cost
+)                                                                         as estimated_cost_usd
 , (timestamp_diff(end_time, start_time, MILLISECOND) * 1.0 / 1000)        as query_duration_seconds
 , error_result.reason	                                                    as error_code
 , error_result.message                                                    as error_message

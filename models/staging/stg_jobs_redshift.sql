@@ -19,7 +19,7 @@ transformed as (
   , users.user_name                                                                   as user_id
   , users.user_id                                                                     as user_name
   , CASE WHEN STL_QUERY.aborted = 1 THEN 'aborted' else 'complete' end                as query_status
-  , null                                                                              as query_cost
+  , null                                                                              as estimated_cost_usd
   , DATEDIFF(milliseconds, STL_QUERY.starttime, STL_QUERY.endtime)  * 1.0 / 1000.0    as query_duration_seconds
   , null                                                                              as error_status
   , null                                                                              as error_code

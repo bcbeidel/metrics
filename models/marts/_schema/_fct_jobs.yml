@@ -15,6 +15,6 @@ models:
       - name: user_id
       - name: user_name
       - name: query_status
-      - name: query_cost
+      - name: estimated_cost_usd
       - name: error_code
       - name: error_message
