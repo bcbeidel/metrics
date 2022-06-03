@@ -1,7 +1,7 @@
 with base as (
   select
     {{ dbt_utils.star(from=ref('stg_users'), except=["is_user_account"]) }}
-  , trim(lower(safe_cast(is_user_account as string))) as is_user_account
+  , trim(lower(cast(is_user_account as string))) as is_user_account
   from {{ ref('stg_users') }}
 )
 
