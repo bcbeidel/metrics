@@ -22,5 +22,5 @@ with job_details as (
 
 select 
   *
-, case when left(lower(query_text), 200) LIKE '%select%' then 1 else 0 end as is_select_statement
+, case when lower(query_text) like '%select%' and lower(query_text) not like '%delete%' then 1 else 0 end as is_select_statement
 from job_details
