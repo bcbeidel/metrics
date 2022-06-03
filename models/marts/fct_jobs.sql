@@ -20,4 +20,7 @@ with job_details as (
   {% endif %}
 )
 
-select * from job_details
+select 
+  *
+, case when lower(query_text) LIKE '%select%' then 1 else 0 end as is_select_statement
+from job_details
