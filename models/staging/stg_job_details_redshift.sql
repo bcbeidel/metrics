@@ -1,7 +1,10 @@
 {{ config(materialized='ephemeral') }}
 
 with users as (
-    select cast(usename as varchar) as usename, usesysid from pg_user
+  select 
+    regexp_replace(usename, '[^[:alnum:][:blank:][:punct:]]', '')  as usename, 
+    usesysid 
+  from pg_user
 )
 
 select
