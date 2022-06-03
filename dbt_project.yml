@@ -35,3 +35,5 @@ vars:
   # Service Level Objective for query speed; 99th percentile of user queries
   # i.e., 99% of user queries should be faster than this number in seconds
   metrics__p99_query_duration_seconds_SLO: 60
+
+  "dbt_date:time_zone": "America/New_York"
