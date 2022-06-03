@@ -45,7 +45,7 @@ daily_costs as (
     , round(sum(case when is_user_account = 1 then query_cost else 0 end), 2) as query_cost_usd_by_users
     , round(sum(case when is_user_account = 0 then query_cost else 0 end), 2) as query_cost_usd_by_nonusers
     , round(sum(query_cost), 2)                                               as query_cost_usd_all  
-    from base
+    from all_jobs
     group by 1
     order by 1 desc
 
