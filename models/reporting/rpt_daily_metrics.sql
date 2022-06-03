@@ -39,12 +39,12 @@ daily_costs as (
 
     select
       created_at_date
-    , sum(case when is_user_account = 1 then 1 else 0 end)                    as job_count_users
-    , sum(case when is_user_account = 0 then 1 else 0 end)                    as job_count_nonusers
-    , count(job_id)                                                           as job_count_all
-    , round(sum(case when is_user_account = 1 then query_cost else 0 end), 2) as query_cost_usd_by_users
-    , round(sum(case when is_user_account = 0 then query_cost else 0 end), 2) as query_cost_usd_by_nonusers
-    , round(sum(query_cost), 2)                                               as query_cost_usd_all  
+    , sum(case when is_user_account = 1 then 1 else 0 end)                            as job_count_users
+    , sum(case when is_user_account = 0 then 1 else 0 end)                            as job_count_nonusers
+    , count(job_id)                                                                   as job_count_all
+    , round(sum(case when is_user_account = 1 then estimated_cost_usd else 0 end), 2) as estimated_cost_usd_by_users
+    , round(sum(case when is_user_account = 0 then estimated_cost_usd else 0 end), 2) as estimated_cost_usd_by_nonusers
+    , round(sum(estimated_cost_usd), 2)                                               as estimated_cost_usd_all  
     from all_jobs
     group by 1
     order by 1 desc
