@@ -18,6 +18,20 @@ with job_details as (
   {% if target.type == 'bigquery' %} 
     select * from {{ ref('stg_job_details_bigquery') }} 
   {% endif %}
+),
+
+user_status as (
+  select
+    user_name
+  , is_user_account
+  , user_team
+  from {{ ref('fct_users') }}
 )
 
-select * from job_details
+select
+  job_details.*
+, user_status.is_user_account as is_user_account
+, user_status.user_team as user_team
+from job_details
+left join user_status
+  on job_details.user_name = user_status.user_name
