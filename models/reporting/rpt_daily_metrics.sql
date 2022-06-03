@@ -83,7 +83,7 @@ user_query_duration_percentiles as (
 
   select 
     created_at_date                                                                                              as created_at_date
-  , percentile_cont(0.95) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p95_query_duration_seconds,
+  , percentile_cont(0.95) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p95_query_duration_seconds
   , percentile_cont(0.99) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p99_query_duration_seconds
   from user_query_duration_percentiles_approximated
     where is_user_account = 1 and is_select_statement = 1
