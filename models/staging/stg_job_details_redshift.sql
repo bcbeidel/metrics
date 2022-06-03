@@ -1,7 +1,7 @@
 {{ config(materialized='ephemeral') }}
 
 with users as (
-    select usename, usesysid from pg_user
+    select cast(usename as varchar) as usename, usesysid from pg_user
 )
 
 select
