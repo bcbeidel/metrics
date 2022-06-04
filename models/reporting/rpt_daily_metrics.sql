@@ -1,16 +1,16 @@
 with all_jobs as (
 
   select
-    jobs.job_id                      as job_id
-  , cast(jobs.created_at as date)    as created_at_date
-  , jobs.query_text_md5              as query_text_md5
-  , jobs.query_text                  as query_text
-  , jobs.query_duration_seconds      as query_duration_seconds
-  , jobs.user_name                   as user_name
-  , users.is_user_account            as is_user_account
-  , jobs.is_select_statement         as is_select_statement
-  , users.user_team                  as user_team
-  , jobs.estimated_cost_usd          as estimated_cost_usd
+    jobs.job_id                                   as job_id
+  , cast(jobs.created_at as date)                 as created_at_date
+  , jobs.query_text_md5                           as query_text_md5
+  , jobs.query_text                               as query_text
+  , jobs.query_duration_seconds                   as query_duration_seconds
+  , jobs.user_name                                as user_name
+  , users.is_user_account                         as is_user_account
+  , jobs.is_select_statement                      as is_select_statement
+  , users.user_team                               as user_team
+  , jobs.estimated_cost_usd                       as estimated_cost_usd
   from {{ ref('fct_jobs') }} as jobs
   left join {{ ref ('dim_users') }} as users
     on jobs.user_name = users.user_id
@@ -38,13 +38,13 @@ date_spine_renamed as (
 daily_costs as (
 
     select
-      created_at_date
-    , sum(case when is_user_account = 1 then 1 else 0 end)                            as job_count_users
-    , sum(case when is_user_account = 0 then 1 else 0 end)                            as job_count_nonusers
-    , count(job_id)                                                                   as job_count_all
-    , round(sum(case when is_user_account = 1 then estimated_cost_usd else 0 end), 2) as estimated_cost_usd_by_users
-    , round(sum(case when is_user_account = 0 then estimated_cost_usd else 0 end), 2) as estimated_cost_usd_by_nonusers
-    , round(sum(estimated_cost_usd), 2)                                               as estimated_cost_usd_all  
+      created_at_date                                                                               as created_at_date
+    , sum(case when is_user_account is true then 1 else 0 end)                                      as job_count_users
+    , sum(case when is_user_account is false then 1 else 0 end)                                     as job_count_nonusers
+    , count(job_id)                                                                                 as job_count_all
+    , round(sum(case when is_user_account is true then estimated_cost_usd else 0.0 end), 2)         as estimated_cost_usd_by_users
+    , round(sum(case when is_user_account is false then estimated_cost_usd else 0.0 end), 2)        as estimated_cost_usd_by_nonusers
+    , round(sum(case when estimated_cost_usd is not null then estimated_cost_usd else 0.0 end), 2)  as estimated_cost_usd_all  
     from all_jobs
     group by 1
     order by 1 desc
@@ -60,7 +60,8 @@ user_query_duration_percentiles_approximated as (
   , count(job_id)                                 as user_query_count
   , approx_quantiles(query_duration_seconds, 100) as query_duration_percentiles
   from all_jobs
-  where is_user_account = 1 and is_select_statement = 1
+  where is_user_account is true 
+    and is_select_statement is true
   group by 1
   
 ),
@@ -86,7 +87,7 @@ user_query_duration_percentiles as (
   , percentile_cont(0.95) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p95_query_duration_seconds
   , percentile_cont(0.99) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p99_query_duration_seconds
   from all_jobs
-    where is_user_account = 1 and is_select_statement = 1
+    where is_user_account is true and is_select_statement is false
 
 )
 
@@ -106,8 +107,8 @@ select
 , {{ var('metrics__p99_query_duration_seconds_SLO') }}        as p99_query_duration_seconds_SLO
 
 from date_spine_renamed
-left join daily_costs 
-    on date_spine_renamed.created_at_date = daily_costs.created_at_date
-left join user_query_duration_percentiles 
-    on date_spine_renamed.created_at_date = user_query_duration_percentiles.created_at_date
-
+left join daily_costs
+       on date_spine_renamed.created_at_date = daily_costs.created_at_date
+left join user_query_duration_percentiles
+       on date_spine_renamed.created_at_date = user_query_duration_percentiles.created_at_date
+order by 1 desc
