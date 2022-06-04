@@ -5,12 +5,12 @@ with all_jobs as (
   , cast(jobs.created_at as date)                 as created_at_date
   , jobs.query_text_md5                           as query_text_md5
   , jobs.query_text                               as query_text
-  , jobs.query_duration_seconds                   as query_duration_seconds
+  , cast(jobs.query_duration_seconds as decimal)  as query_duration_seconds
   , jobs.user_name                                as user_name
   , users.is_user_account                         as is_user_account
   , jobs.is_select_statement                      as is_select_statement
   , users.user_team                               as user_team
-  , jobs.estimated_cost_usd                       as estimated_cost_usd
+  , cast(jobs.estimated_cost_usd as decimal)      as estimated_cost_usd
   from {{ ref('fct_jobs') }} as jobs
   left join {{ ref ('dim_users') }} as users
     on jobs.user_name = users.user_id
