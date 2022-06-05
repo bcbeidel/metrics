@@ -1,0 +1,39 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'metrics'
+version: '0.0.1'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'metrics'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+vars:
+  # location of table that maps user emails to boolean 'is_user_account'
+  metrics__user_mapping_table:
+  # number of days of job history to include in metrics calculation
+  metrics__days_of_history: 90
+  # Service Level Objective for query speed; 95th percentile of user queries
+  # i.e., 95% of user queries should be faster than this number in seconds
+  metrics__p95_query_duration_seconds_SLO: 10
+  # Service Level Objective for query speed; 99th percentile of user queries
+  # i.e., 99% of user queries should be faster than this number in seconds
+  metrics__p99_query_duration_seconds_SLO: 60
+
+  "dbt_date:time_zone": "America/New_York"
