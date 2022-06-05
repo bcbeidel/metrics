@@ -17,8 +17,8 @@ hourly as (
   {% endif %}
   , sum(estimated_cost_usd)           as estimated_cost_usd 
   from base
-  group by 1, 2
-  order by 2 desc
+  group by 1
+  order by 1 desc
 
 )
 
