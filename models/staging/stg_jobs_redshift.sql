@@ -10,14 +10,14 @@ with users as (
 transformed as (
 
   select
-    STL_QUERY.query                                                                   as job_id
-  , STL_QUERY.starttime                                                               as created_at
-  , STL_QUERY.starttime                                                               as started_at
-  , STL_QUERY.endtime                                                                 as ended_at
+    cast(STL_QUERY.query as varchar)                                                  as job_id
+  , cast(STL_QUERY.starttime as timestamp)                                            as created_at
+  , cast(STL_QUERY.starttime as timestamp)                                            as started_at
+  , cast(STL_QUERY.endtime as timestamp)                                              as ended_at
   , 'QUERY'                                                                           as statement_type
   , regexp_replace(STL_QUERY.querytxt, '[^[:alnum:][:blank:][:punct:]]', '')          as query_text
-  , users.user_name                                                                   as user_id
-  , users.user_id                                                                     as user_name
+  , cast(users.user_name as varchar)                                                  as user_id
+  , cast(users.user_id as varchar)                                                    as user_name
   , CASE WHEN STL_QUERY.aborted = 1 THEN 'aborted' else 'complete' end                as query_status
   , null                                                                              as estimated_cost_usd
   , DATEDIFF(milliseconds, STL_QUERY.starttime, STL_QUERY.endtime)  * 1.0 / 1000.0    as query_duration_seconds

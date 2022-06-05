@@ -1,27 +1,27 @@
 {{ config(materialized='ephemeral') }}
 
 select
-  job_id	                                                                as job_id
-, creation_time	                                                          as created_at
-, start_time                                                              as started_at
-, end_time                                                                as ended_at	
-, statement_type                                                          as statement_type
-, {{ dbt_utils.surrogate_key(['query']) }}	                              as query_text_md5
-, query	                                                                  as query_text
-, user_email                                                              as user_id
-, user_email	                                                            as user_name
-, state		                                                                as query_status
+  cast(job_id as string)	                                          as job_id
+, cast(creation_time as timestamp)	                                as created_at
+, cast(start_time as timestamp)                                     as started_at
+, cast(end_time as timestamp)                                       as ended_at	
+, cast(statement_type  as string)	                                  as statement_type
+, {{ dbt_utils.surrogate_key(['query']) }}	                        as query_text_md5
+, cast(query  as string)		                                        as query_text
+, cast(user_email as string)                                        as user_id
+, cast(user_email as string)	                                      as user_name
+, cast(state as string)		                                          as query_status
 , round(
   safe_multiply(
     5
   , safe_divide(
-      total_bytes_billed
+      cast(total_bytes_billed as decimal)
     , POWER(10, 12)) 
   ), 2
-)                                                                         as estimated_cost_usd
-, (timestamp_diff(end_time, start_time, MILLISECOND) * 1.0 / 1000)        as query_duration_seconds
-, error_result.reason	                                                    as error_code
-, error_result.message                                                    as error_message
+)                                                                   as estimated_cost_usd
+, (timestamp_diff(end_time, start_time, MILLISECOND) * 1.0 / 1000)  as query_duration_seconds
+, cast(error_result.reason as string)	                              as error_code
+, cast(error_result.message as string)                              as error_message
 from `region-us`.`INFORMATION_SCHEMA`.`JOBS_BY_PROJECT`
 where creation_time >= (DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL -{{ var('metrics__days_of_history') }} DAY))
 
