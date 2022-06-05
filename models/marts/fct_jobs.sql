@@ -26,5 +26,5 @@ select
         and lower(query_text) not like '%delete%' 
        then true 
        else false 
-end as is_select_statement
+  end as is_select_statement
 from job_details
