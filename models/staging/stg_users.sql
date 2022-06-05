@@ -1,6 +1,5 @@
 {{ config(materialized='ephemeral') }}
 
-
 select
 
 {% if target.type == 'redshift' %} 
