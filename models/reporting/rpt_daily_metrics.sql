@@ -9,7 +9,6 @@ with all_jobs as (
   , jobs.user_name                                as user_name
   , users.is_user_account                         as is_user_account
   , jobs.is_select_statement                      as is_select_statement
-  , users.user_team                               as user_team
   , cast(jobs.estimated_cost_usd as decimal)      as estimated_cost_usd
   from {{ ref('fct_jobs') }} as jobs
   left join {{ ref ('dim_users') }} as users
