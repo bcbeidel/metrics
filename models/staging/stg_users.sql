@@ -14,4 +14,4 @@ select
 , cast(is_user_account as string)  as is_user_account
 {% endif %}
 
-from {{ var('metrics__user_mapping_table') }} as 
+from {{ var('metrics__user_mapping_table') }}
