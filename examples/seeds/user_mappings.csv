@@ -1,5 +1,7 @@
-user_name,is_user_account,team_name
-example-service-account@email.com,0,procurement
-john-doe@email.com,1,procurement
-jane-doe@email.com,true,finance
-another-service-account@email.com,false,operations
+user_id,user_name,is_user_account
+example-service-account@email.com,example-service-account@email.com,0
+john-doe@email.com,john-doe@email.com,1
+jane-doe@email.com,jane-doe@email.com,TRUE
+another-service-account@email.com,another-service-account@email.com,FALSE
+person@google.com,person@google.com,yes
+not-a-person@email.com,not-a-person@email.com,no

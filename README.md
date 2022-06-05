@@ -21,10 +21,16 @@ config-version: 2
 ...
 
 vars:
-  # location of table that maps user_name to boolean 'is_user_account'
-  metrics__user_mapping_table: "{{ ref('metrics__user_mapping') }}"
+  # location of table that maps user emails to boolean 'is_user_account'
+  metrics__user_mapping_table:
   # number of days of job history to include in metrics calculation
   metrics__days_of_history: 90
+  # Service Level Objective for query speed; 95th percentile of user queries
+  # i.e., 95% of user queries should be faster than this number in seconds
+  metrics__p95_query_duration_seconds_SLO: 10
+  # Service Level Objective for query speed; 99th percentile of user queries
+  # i.e., 99% of user queries should be faster than this number in seconds
+  metrics__p99_query_duration_seconds_SLO: 60
 ```
 
 4. Execute `dbt run --full-refresh` for the first iteration – the models will get built as part of your run!
