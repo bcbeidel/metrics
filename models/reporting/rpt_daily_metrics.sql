@@ -16,6 +16,14 @@ with all_jobs as (
 
 ),
 
+user_queries as (
+
+  select * from all_jobs
+  where is_user_account is true 
+    and is_select_statement is true
+
+),
+
 date_spine as (
 
     {{ dbt_utils.date_spine(
@@ -58,9 +66,7 @@ user_query_duration_percentiles_approximated as (
     created_at_date                               as created_at_date
   , count(job_id)                                 as user_query_count
   , approx_quantiles(query_duration_seconds, 100) as query_duration_percentiles
-  from all_jobs
-  where is_user_account is true 
-    and is_select_statement is true
+  from user_queries
   group by 1
   
 ),
@@ -85,8 +91,7 @@ user_query_duration_percentiles as (
     created_at_date                                                                                              as created_at_date
   , percentile_cont(0.95) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p95_query_duration_seconds
   , percentile_cont(0.99) within group (order by query_duration_seconds asc) over (partition by created_at_date) as p99_query_duration_seconds
-  from all_jobs
-    where is_user_account is true and is_select_statement is false
+  from user_queries
 
 )
 
