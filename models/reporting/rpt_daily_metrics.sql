@@ -20,7 +20,7 @@ date_spine as (
 
     {{ dbt_utils.date_spine(
         datepart="day",
-        start_date=dbt_date.n_days_ago(var('metrics__days_of_job_history')),
+        start_date=dbt_date.n_days_ago(var('metrics__days_of_history')),
         end_date=dbt_date.today()
     )}}
     
