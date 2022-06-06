@@ -45,4 +45,11 @@ transformed as (
 select 
   *
 , {{ dbt_utils.surrogate_key(['query_text']) }} as query_text_md5
+, case when lower(query_text) like '%select%'
+        and lower(query_text) not like '%delete%'
+        and lower(query_text) not like '%insert%'
+        and lower(query_text) not like '%update%'
+       then true
+       else false
+  end                                           as is_select_statement
 from transformed
