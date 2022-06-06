@@ -20,11 +20,4 @@ with job_details as (
   {% endif %}
 )
 
-select 
-  *
-, case when lower(query_text) like '%select%' 
-        and lower(query_text) not like '%delete%' 
-       then true 
-       else false 
-  end as is_select_statement
-from job_details
+select * from job_details
