@@ -22,6 +22,12 @@ select
 , (timestamp_diff(end_time, start_time, MILLISECOND) * 1.0 / 1000)  as query_duration_seconds
 , cast(error_result.reason as string)	                              as error_code
 , cast(error_result.message as string)                              as error_message
+-- provide boolean logic to identify select statements
+, case when trim(lower(statement_type)) = 'select'
+       then true
+       else false
+  end                                                               as is_select_statement
+
 from `region-us`.`INFORMATION_SCHEMA`.`JOBS_BY_PROJECT`
 where creation_time >= (DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL -{{ var('metrics__days_of_history') }} DAY))
 
